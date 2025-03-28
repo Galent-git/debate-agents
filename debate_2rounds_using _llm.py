@@ -5,6 +5,7 @@ import random
 import time
 from datetime import datetime
 import os
+import requests
 
 # === Config ===
 USE_OPENAI = False  # Set to True to use OpenAI instead of Ollama
@@ -19,10 +20,20 @@ OLLAMA_MODEL_NAME = "your-ollama-model-name"
 MODEL_NAME = "gpt-4" if USE_OPENAI else OLLAMA_MODEL_NAME
 LOG_FILE = "debate_log.txt"
 
+def check_ollama_alive():
+    try:
+        response = requests.get("http://localhost:11434")
+        return response.status_code == 200
+    except requests.exceptions.ConnectionError:
+        return False
+
 def get_llm():
     if USE_OPENAI:
         return OpenAI(model=MODEL_NAME, temperature=0.7, api_key=OPENAI_API_KEY)
     else:
+        if not check_ollama_alive():
+            print("❗ Ollama server is not running. Please run 'ollama serve' first.")
+            exit(1)
         return Ollama(model=MODEL_NAME, temperature=0.7)
 
 llm = get_llm()
@@ -92,3 +103,4 @@ with open(LOG_FILE, "a") as log:
     log.write(f"Agent 1: {identity_1['name']} | {identity_1['job']} | Goal: {identity_1['goal']}\n")
     log.write(f"Agent 2: {identity_2['name']} | {identity_2['job']} | Goal: {identity_2['goal']}\n")
     log.write(debate_summary + "\n")
+

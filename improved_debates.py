@@ -121,12 +121,22 @@ def generate_debater_identity() -> dict:
     Returns:
         dict: A dictionary with keys 'name', 'job', 'personality', 'goal', 'backstory'.
     """
+   name = fake.name()
+    job = fake.job()
+    personality = fake.sentence(nb_words=random.randint(8, 15))
+    goal = fake.catch_phrase()
+    # Corrected backstory generation - uses the *generated* name
+    backstory = (
+        f"Known for their {fake.bs()} approach, {name} believes deeply in "
+        f"{fake.company_suffix()} principles. {fake.paragraph(nb_sentences=2)}"
+    )
+    # Return the collected dictionary
     return {
-        "name": fake.name(),
-        "job": fake.job(),
-        "personality": fake.sentence(nb_words=random.randint(8, 15)), # Slightly longer personality
-        "goal": fake.catch_phrase(),
-        "backstory": f"Known for their {fake.bs()} approach, {fake.name()} believes deeply in {fake.company_suffix()} principles. {fake.paragraph(nb_sentences=2)}"
+        "name": name,
+        "job": job,
+        "personality": personality,
+        "goal": goal,
+        "backstory": backstory
     }
 
 def run_debate_turn(agent: Agent, agent_identity: dict, opponent_statement: str, topic: str, turn_description: str) -> str:

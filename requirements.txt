@@ -1,0 +1,9 @@
+requests>=2.25.0
+Faker>=15.0.0
+python-dotenv>=1.0.0
+crewai>=0.28.8   # Specify recent versions known to work
+langchain>=0.1.0
+langchain-community>=0.0.20
+langchain-openai>=0.1.0
+langchain-google-genai>=0.1.0
+google-generativeai>=0.4.0 # Required by langchain-google-genai

@@ -1,50 +1,79 @@
-Debate Agents with Faker & Ollama
-Autonomously generated debates between randomly invented personas—powered by CrewAI, Faker, and either OpenAI or Ollama.
+# AI Debate Club: Agent Simulation with CrewAI & LLMs
 
-What happens when two synthetic minds with wildly different backstories and goals argue over a nonsense topic? This project explores LLM agent simulation, randomness, and debate structure.
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-Features
+This project simulates debates between two AI agents with dynamically generated personalities and goals. Powered by [CrewAI](https://github.com/joaomdmoura/crewAI) for agent orchestration and [Faker](https://github.com/faker-py/faker) for persona creation, it supports multiple Large Language Model (LLM) backends including OpenAI, Google Gemini, and local models via Ollama.
 
-  Ollama or OpenAI support – switch between local LLMs or cloud models
-  Random agent generation – identities, jobs, goals, and backstories via Faker
-  Debate structure – intro statements + 1 round of rebuttals
-  LangChain integration – to handle LLM calls and agent reasoning
-  Topic flexibility – input a custom debate topic or let Faker.bs() generate one
-  Auto-logging – every debate is timestamped and saved to debate_log.txt
+Observe how different LLMs handle argumentation, adopt personas, and respond to counter-arguments on customizable or randomly generated topics.
 
-Requirements
+## Features
 
-  Python 3.8+
-  Ollama running locally (if not using OpenAI)
-  One of the following LLMs:
-  Local: ollama run mistral, deepseek, llama2, etc.
-  Cloud: OpenAI's gpt-4 or compatible models
+*   **Multi-LLM Support:** Seamlessly switch between:
+    *   OpenAI (GPT-3.5, GPT-4, etc.)
+    *   Google Gemini (Gemini Pro, etc.)
+    *   Local models via Ollama (Llama3, Mistral, Mixtral, etc.)
+*   **Dynamic Agent Personas:** Uses Faker to generate unique names, jobs, goals, personalities, and backstories for each debate.
+*   **Structured Debate Flow:** Implements opening statements followed by configurable rounds of rebuttals.
+*   **CrewAI Framework:** Leverages CrewAI for robust agent definition and task execution.
+*   **Flexible Topics:** Input your own debate topic or let the script generate a random one.
+*   **Comprehensive Logging:** Automatically saves debate transcripts, agent details, topic, and LLM used to a timestamped log file (`debate_log.txt`).
+*   **Configurable:** Easily configure LLM choice, API keys, model names, and debate parameters via an `.env` file.
 
-Usage
+## Prerequisites
 
-  python debate.py
+*   **Python:** Version 3.8 or higher.
+*   **Git:** For cloning the repository.
+*   **LLM Access:**
+    *   **Ollama (Recommended for local use):**
+        *   Install [Ollama](https://ollama.com/).
+        *   Pull the desired model(s) (e.g., `ollama pull llama3`, `ollama pull mistral`).
+        *   Ensure the Ollama server is running (`ollama serve` in a separate terminal).
+    *   **OpenAI:** An API key from [OpenAI Platform](https://platform.openai.com/api-keys).
+    *   **Google Gemini:** An API key from [Google AI Studio](https://aistudio.google.com/app/apikey).
 
-  You'll be prompted to enter a topic or leave blank for a randomized one.
+## Installation & Setup
 
-  The script will:
-    Spawn two fictional agents with backstories and goals
-    Let them debate the topic
-    Print and log the full exchange
+1.  **Clone the Repository:**
+    ```bash
+    git clone https://github.com/your-username/your-repo-name.git
+    cd your-repo-name
+    ```
+    *(Replace `your-username/your-repo-name` with the actual URL)*
 
-Configuration
+2.  **Create a Virtual Environment (Recommended):**
+    ```bash
+    python -m venv venv
+    source venv/bin/activate  # On Windows use `venv\Scripts\activate`
+    ```
 
-  Edit these lines in the script to switch models:
+3.  **Install Dependencies:**
+    ```bash
+    pip install -r requirements.txt
+    ```
 
-    USE_OPENAI = False  # Set to True to use OpenAI
-    OPENAI_API_KEY = \"your-openai-api-key\"
-    OLLAMA_MODEL_NAME = \"mistral\"  # Or any local model installed via Ollama
-    Make sure ollama serve is running if using local models.
+4.  **Configure Environment Variables:**
+    *   Copy the example environment file:
+        ```bash
+        cp .env.example .env
+        ```
+        *(If `.env.example` doesn't exist, copy the content from the `.env` File Template section above into a new file named `.env`)*
+    *   **Edit the `.env` file:**
+        *   Set **exactly one** of `USE_OLLAMA`, `USE_OPENAI`, or `USE_GEMINI` to `True`. Set the others to `False`.
+        *   Fill in the corresponding API key(s) (`OPENAI_API_KEY`, `GEMINI_API_KEY`) if using OpenAI or Gemini.
+        *   Specify the correct model names (`OPENAI_MODEL_NAME`, `OLLAMA_MODEL_NAME`, `GEMINI_MODEL_NAME`) for your chosen provider.
+        *   Adjust `OLLAMA_BASE_URL` if your Ollama server runs on a different address/port.
+        *   Optionally, modify debate settings like `NUM_REBUTTAL_ROUNDS`.
+    *   **Important:** The `.env` file contains sensitive information (API keys). **Do not commit this file to Git.** The `.gitignore` file included should prevent accidental commits.
 
-Output
-  
-  All debates are appended to a debate_log.txt file with timestamp, topic, agent info, and full text.
+## Usage
+
+1.  **Ensure Prerequisites Met:** If using Ollama, make sure `ollama serve` is running.
+2.  **Run the Script:**
+    ```bash
+    python debate_agents.py
+    ```
+3.  **Enter Topic:** The script will prompt you to enter a debate topic. You can type your own or press Enter to have one randomly generated.
+4.  **Observe:** The debate will proceed turn-by-turn in your console. A short pause is included between turns for readability.
+5.  **Check Log:** After completion, the full debate transcript, agent details, and configuration used will be appended to `debate_log.txt`.
 
 
-Safety
-
-  This project uses LLMs with shell and API access. Ensure your API key is kept private and that local agents run in sandboxed environments if extended.
